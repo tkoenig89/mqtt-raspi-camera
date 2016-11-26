@@ -1,4 +1,9 @@
-require("./logger").setDebug(true);
+//set logging levels
+require("./logger")
+    .setDebug(false)
+    .setLog(true)
+    .setError(true);
+
 var MqttCameraRunner = require("./mqtt-camera-runner");
 var MqttUploader = require("./mqtt-upoad");
 

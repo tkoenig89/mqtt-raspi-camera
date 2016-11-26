@@ -6,7 +6,7 @@ module.exports = ImageStore();
 
 function ImageStore() {
     var images = [], _imagesOld;
-    
+
     return {
         add: add,
         getLatest: getLatest,
@@ -24,10 +24,12 @@ function ImageStore() {
         return images[images.length - 1];
     }
 
-    function moveImagesToTargetFolder(targetFolder) {
+    function moveImagesToTargetFolder(targetFolder) {        
+        logger.log("moving temp images to", targetFolder);
+
         var latest = getLatest();
         _imagesOld = images;
-        images = [latest];
+        images = [latest];        
 
         for (var i = 0; i < _imagesOld.length - 1; i++) {
             var oldImage = _imagesOld[i];

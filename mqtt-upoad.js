@@ -23,7 +23,7 @@ function MqttUploader(opts) {
                 if (err) return logger.error(err);
                 var payload = createMqttPayload(image, buffer);
 
-                logger.debug("publishing image via mqtt");
+                logger.log("publishing", image.fileName, "via mqtt");
                 client.publish(opts.topic, payload, { qos: opts.qos });
             });
         }
