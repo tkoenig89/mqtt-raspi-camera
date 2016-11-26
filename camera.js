@@ -1,36 +1,39 @@
 var RaspiCam = require("raspicam");
 var fs = require("fs");
+var logger = require("./logger");
 
 module.exports = CameraWrapper;
 
 function CameraWrapper(options) {
     var self = this;
     self.options = initOptions(options);
-    self._listeners = [];
+    self._imageListeners = [];
+    self._finishListeners = [];
     self._camera = new RaspiCam({
         mode: "timelapse",
-        output: self.options.root + "img_%d.jpg",
-        datetime: true,
+        output: self.options.root + "%d.jpg",
+        timestamp: true,
         e: "jpg",
         q: 10,
         n: true,
-        t: 360000,
-        tl: 15000
+        t: 15000,
+        tl: 5000
     });
 
     self._camera.on("read", function (err, timestamp, filename) {
         if (!err && !filename.endsWith("~")) {
             var filePath = self.options.root + filename;
-            for (let i = 0; i < self._listeners.length; i++) {
-                setTimeout(self._listeners[i].bind(null, filePath, timestamp), 0);
+            for (let i = 0; i < self._imageListeners.length; i++) {
+                setTimeout(self._imageListeners[i].bind(null, filePath, timestamp), 0);
             }
         }
     });
 
-    self._camera.on("exit",function(){
-        console.log("done");
+    self._camera.on("exit", function () {
         self._camera.stop();
-        self._camera.start();
+        for (let i = 0; i < self._finishListeners.length; i++) {
+            setTimeout(self._finishListeners[i], 0);
+        }
     });
 }
 
@@ -43,9 +46,11 @@ function initOptions(opts) {
 }
 
 CameraWrapper.prototype.onImageStored = function onImageStored(listener) {
-    this._listeners.push(listener);
+    this._imageListeners.push(listener);
 };
-
+CameraWrapper.prototype.onFinished = function onFinished(listener) {
+    this._finishListeners.push(listener);
+};
 CameraWrapper.prototype.start = function start() {
     this._camera.start();
 };

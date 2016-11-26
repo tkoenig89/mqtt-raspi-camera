@@ -1,14 +1,10 @@
-var Camera = require("./camera");
-var imageStore = require("./image-store");
+var MqttCameraRunner = require("./mqtt-camera-runner");
 
-var cam = new Camera({
-    root: "/mnt/usb/testimages"
+//configure
+var runner = MqttCameraRunner({
+    root: "/mnt/usb/images",
+    target: "/mnt/usb/images/history"
 });
 
-cam.onImageStored(onImageSaved);
-cam.start();
-
-function onImageSaved(filename, timestamp) {
-    console.log(filename, timestamp);
-    imageStore.add(filename, timestamp);
-}
+//start
+runner.go();
