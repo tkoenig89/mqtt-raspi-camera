@@ -19,8 +19,8 @@ function CameraWrapper(options) {
         th: "none",
         q: 10,
         n: true,
-        t: 300000, //5min
-        tl: 15000  //15sec
+        t: options.tempToStorageInterval || 300000, //5min
+        tl: options.imageInterval || 15000  //15sec
     });
 
     self._camera.on("read", function (err, timestamp, filename) {

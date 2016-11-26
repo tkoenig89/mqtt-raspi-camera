@@ -1,5 +1,4 @@
 var fs = require("fs");
-var debugLog = require("./logger").debug;
 
 module.exports = {
     padNmbr: padNmbr,
@@ -30,7 +29,6 @@ function pathConcat(path1, path2) {
 
 function ensureFolder(folderPath, callback) {
     fs.exists(folderPath, (doesExist) => {
-        debugLog(folderPath, doesExist);
         if (!doesExist) {
             fs.mkdir(folderPath, callback);
         } else {
