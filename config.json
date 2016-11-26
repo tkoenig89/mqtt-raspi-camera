@@ -1,0 +1,5 @@
+{
+    "root": "/mnt/usb/images",
+    "target": "/mnt/usb/images/history",
+    "publishInterval": 300000
+}

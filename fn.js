@@ -4,6 +4,7 @@ var debugLog = require("./logger").debug;
 module.exports = {
     padNmbr: padNmbr,
     pathConcat: pathConcat,
+    getFileExtension: getFileExtension,
     ensureFolder: ensureFolder,
     deleteFolderRecursive: deleteFolderRecursive
 };
@@ -51,3 +52,13 @@ function deleteFolderRecursive(path) {
         fs.rmdirSync(path);
     }
 };
+
+
+/**
+ * Extracts the file extension from the given path
+ * @param {string} filePath
+ * @returns {string}
+ */
+function getFileExtension(filePath) {
+    return filePath.substr(filePath.lastIndexOf(".") + 1)
+}

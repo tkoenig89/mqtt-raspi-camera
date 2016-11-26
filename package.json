@@ -14,6 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "gm": "^1.23.0",
+    "mqtt": "^2.1.3",
     "raspicam": "^0.2.13"
   }
 }

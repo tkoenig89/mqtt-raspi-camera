@@ -10,14 +10,17 @@ function CameraWrapper(options) {
     self._imageListeners = [];
     self._finishListeners = [];
     self._camera = new RaspiCam({
+        w: 2592,
+        h: 1944,
         mode: "timelapse",
         output: self.options.root + "%d.jpg",
         timestamp: true,
         e: "jpg",
+        th: "none",
         q: 10,
         n: true,
-        t: 15000,
-        tl: 5000
+        t: 300000, //5min
+        tl: 15000  //15sec
     });
 
     self._camera.on("read", function (err, timestamp, filename) {
@@ -48,9 +51,11 @@ function initOptions(opts) {
 CameraWrapper.prototype.onImageStored = function onImageStored(listener) {
     this._imageListeners.push(listener);
 };
+
 CameraWrapper.prototype.onFinished = function onFinished(listener) {
     this._finishListeners.push(listener);
 };
+
 CameraWrapper.prototype.start = function start() {
     this._camera.start();
 };

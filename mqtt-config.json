@@ -1,0 +1,10 @@
+{
+    "trustedHostname": "localhost",
+    "identifier": "clientname",
+    "address": "tls://localhost:1883",
+    "username": "user",
+    "password": "password",
+    "ca": "/certs/ca.crt",
+    "topic": "clientname/images",
+    "qos": 0
+}

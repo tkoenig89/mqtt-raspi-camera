@@ -1,8 +1,8 @@
 var fn = require("./fn");
 var Camera = require("./camera");
 var imageStore = require("./image-store");
-var logger = require("./logger").setDebug(false);
-var fs = require("fs");
+var mqttUploader = require("./mqtt-upoad");
+var logger = require("./logger");
 var cam;
 
 module.exports = MqttCameraRunner;
@@ -35,13 +35,15 @@ function MqttCameraRunner(opts) {
         //add listeners
         cam.onImageStored(onImageSaved);
         cam.onFinished(onFinished);
-        
+
         //start camera
         cam.start();
 
         setInterval(function () {
-            logger.log(imageStore.getLatest());
-        }, 30000);
+            var latestImg = imageStore.getLatest();
+            logger.log("latest", latestImg);
+            mqttUploader.publishImage(latestImg);
+        }, opts.publishInterval);
     }
 
     function onImageSaved(filename, timestamp) {
