@@ -1,13 +1,12 @@
 var fn = require("./fn");
 var Camera = require("./camera");
 var imageStore = require("./image-store");
-var mqttUploader = require("./mqtt-upoad");
 var logger = require("./logger");
 var cam;
 
 module.exports = MqttCameraRunner;
 
-function MqttCameraRunner(opts) {
+function MqttCameraRunner(opts, mqttUploader) {
     var tempFolder = fn.pathConcat(opts.root, "temp_imgs");
 
     return {
@@ -39,9 +38,9 @@ function MqttCameraRunner(opts) {
         //start camera
         cam.start();
 
+        //set interval to publish images
         setInterval(function () {
             var latestImg = imageStore.getLatest();
-            logger.log("latest", latestImg);
             mqttUploader.publishImage(latestImg);
         }, opts.publishInterval);
     }
