@@ -10,6 +10,7 @@ function CameraWrapper(options) {
     self._imageListeners = [];
     self._finishListeners = [];
     self._camera = new RaspiCam({
+        log: logger.debug,
         w: 2592,
         h: 1944,
         mode: "timelapse",
