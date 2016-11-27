@@ -30,7 +30,8 @@ function MqttCameraRunner(opts, mqttUploader) {
         cam = new Camera({
             root: tempFolder,
             imageInterval: opts.imageInterval,
-            tempToStorageInterval: opts.tempToStorageInterval
+            tempToStorageInterval: opts.tempToStorageInterval,
+            encoding: opts.encoding
         });
 
         //add listeners

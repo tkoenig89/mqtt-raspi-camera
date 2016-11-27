@@ -1,6 +1,7 @@
 {
     "root": "/mnt/usb/images",
     "target": "/mnt/usb/images/history",
+    "encoding": "jpg",
     "imageInterval": 15000,
     "tempToStorageInterval": 300000,
     "publishInterval": 300000
