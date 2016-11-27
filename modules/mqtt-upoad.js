@@ -10,15 +10,15 @@ function MqttUploader(opts) {
 
     //add last will
     opts.will = {
-        topic: "stall/" + opts.identifier + "/status",
-        payload: "offline", qos: 1, retain: true
+        topic: "stall/" + opts.identifier + "/isOnline",
+        payload: "no", qos: 1, retain: true
     };
 
     //connect
     var client = MqttClient(opts);
     
     //send online status
-    client.publish(opts.will.topic, "online", { qos: 1, retain: true });
+    client.publish(opts.will.topic, "yes", { qos: 1, retain: true });
     
     return {
         publishImage: publishImage
