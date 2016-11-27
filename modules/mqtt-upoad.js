@@ -13,7 +13,6 @@ function MqttUploader(opts) {
         publishImage: publishImage
     };
 
-
     function publishImage(image) {
         //only publish the latest images
         if (image.timestamp > lastTimestamp) {

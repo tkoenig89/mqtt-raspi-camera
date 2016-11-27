@@ -14,9 +14,9 @@ function CameraWrapper(options) {
         w: 2592,
         h: 1944,
         mode: "timelapse",
-        output: self.options.root + "%d.jpg",
+        output: self.options.root + "%d." + self.options.encoding,
         timestamp: true,
-        e: "jpg",
+        e: self.options.encoding,
         th: "none",
         q: 10,
         n: true,
@@ -44,6 +44,7 @@ function CameraWrapper(options) {
 function initOptions(opts) {
     opts = opts || {};
     opts.root = opts.root || ".";
+    opts.encoding = opts.encoding || "jpg";
     if (!opts.root.endsWith("/")) opts.root = opts.root + "/";
 
     return opts;
