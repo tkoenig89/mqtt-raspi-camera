@@ -6,9 +6,20 @@ var MqttClient = require("./mqtt-publishing-client");
 module.exports = MqttUploader;
 
 function MqttUploader(opts) {
-    var client = MqttClient(opts);
     var lastTimestamp = 0;
 
+    //add last will
+    opts.will = {
+        topic: "stall/" + opts.identifier + "/status",
+        payload: "offline", qos: 1, retain: true
+    };
+
+    //connect
+    var client = MqttClient(opts);
+    
+    //send online status
+    client.publish(opts.will.topic, "online", { qos: 1, retain: true });
+    
     return {
         publishImage: publishImage
     };
