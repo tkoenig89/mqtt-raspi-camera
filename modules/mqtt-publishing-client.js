@@ -17,13 +17,16 @@ function MqttPublishingClient(opts) {
         setupEventlisteners();
     }
 
-
     function publish(topic, message, options, callback) {
         client.publish(topic, message, options, callback);
     }
 
     function onConnect(connack) {
         logger.debug("connected");
+    }
+
+    function onError(err) {
+        logger.error("MQTT ERROR", err);
     }
 
     function initClient() {
@@ -61,5 +64,6 @@ function MqttPublishingClient(opts) {
 
     function setupEventlisteners() {
         client.on("connect", onConnect);
+        client.on("error", onError);
     }
 }

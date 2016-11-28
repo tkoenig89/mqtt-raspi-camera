@@ -16,10 +16,10 @@ function MqttUploader(opts) {
 
     //connect
     var client = MqttClient(opts);
-    
+
     //send online status
     client.publish(opts.will.topic, "yes", { qos: 1, retain: true });
-    
+
     return {
         publishImage: publishImage
     };
@@ -34,7 +34,11 @@ function MqttUploader(opts) {
                 var payload = createMqttPayload(image, buffer);
 
                 logger.log("publishing", image.fileName, "via mqtt");
-                client.publish(opts.topic, payload, { qos: opts.qos });
+                try {
+                    client.publish(opts.topic, payload, { qos: opts.qos });
+                } catch (ex) {
+                    logger.error("catched", ex);
+                }
             });
         }
     }
