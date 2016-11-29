@@ -37,6 +37,7 @@ function MqttPublishingClient(opts) {
             clean: true,
             ca: opts.ca ? [fs.readFileSync(opts.ca)] : null,
             checkServerIdentity: checkServerIdentityOverwrite,
+            reconnectPeriod: opts.reconnectPeriod || 10000,
             will: !opts.will ? null : {
                 topic: opts.will.topic,
                 payload: opts.will.payload,
