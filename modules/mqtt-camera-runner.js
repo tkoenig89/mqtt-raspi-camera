@@ -3,12 +3,15 @@ var Camera = require("./camera");
 var imageStore = require("./image-store");
 var SkipHours = require("skiphours");
 var logger = require("./logger");
+var Schedule = require("./schedule");
+
 var cam;
 
 module.exports = MqttCameraRunner;
 
 function MqttCameraRunner(opts, mqttUploader) {
     var tempFolder = fn.pathConcat(opts.root, "temp_imgs");
+    var publishImageTask;
 
     return {
         go: go
@@ -42,14 +45,9 @@ function MqttCameraRunner(opts, mqttUploader) {
         //start camera
         cam.start();
 
-        //setup a function wrapper to only send images at specific times
-        var repeatOnlyAtSpecificHours = SkipHours(() => {
-            var latestImg = imageStore.getLatest();
-            mqttUploader.publishImage(latestImg);
-        }, opts.hours || "!");
-
-        //set interval to publish images
-        setInterval(repeatOnlyAtSpecificHours, opts.publishInterval);
+        //schedule image publishing
+        publishImageTask = setupPublishImageTask();
+        publishImageTask.start();
     }
 
     function onImageSaved(filename, timestamp) {
@@ -60,5 +58,15 @@ function MqttCameraRunner(opts, mqttUploader) {
         imageStore.moveImagesToTargetFolder(opts.target);
         logger.debug("starting over");
         cam.start();
+    }
+
+    function setupPublishImageTask() {
+        //setup a function wrapper to only send images at specific times
+        var repeatOnlyAtSpecificHours = SkipHours(() => {
+            var latestImg = imageStore.getLatest();
+            mqttUploader.publishImage(latestImg);
+        }, opts);
+
+        return Schedule.createTask(repeatOnlyAtSpecificHours, opts.publishInterval);
     }
 }
