@@ -1,6 +1,7 @@
 var fn = require("./fn");
 var Camera = require("./camera");
 var imageStore = require("./image-store");
+var SkipHours = require("skiphours");
 var logger = require("./logger");
 var cam;
 
@@ -41,11 +42,14 @@ function MqttCameraRunner(opts, mqttUploader) {
         //start camera
         cam.start();
 
-        //set interval to publish images
-        setInterval(function () {
+        //setup a function wrapper to only send images at specific times
+        var repeatOnlyAtSpecificHours = SkipHours(() => {
             var latestImg = imageStore.getLatest();
             mqttUploader.publishImage(latestImg);
-        }, opts.publishInterval);
+        }, opts.hours || "!");
+
+        //set interval to publish images
+        setInterval(repeatOnlyAtSpecificHours, opts.publishInterval);
     }
 
     function onImageSaved(filename, timestamp) {

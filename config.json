@@ -4,5 +4,6 @@
     "encoding": "jpg",
     "imageInterval": 15000,
     "tempToStorageInterval": 300000,
-    "publishInterval": 300000
+    "publishInterval": 300000,
+    "hours": "!0-5,22,23"
 }
