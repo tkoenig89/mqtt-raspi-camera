@@ -6,5 +6,6 @@
     "password": "password",
     "ca": "/certs/ca.crt",
     "topic": "clientname/images",
-    "qos": 0
+    "qos": 0,
+    "retain": false
 }
