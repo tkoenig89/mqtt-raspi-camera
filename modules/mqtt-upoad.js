@@ -14,6 +14,9 @@ function MqttUploader(opts) {
         payload: "no", qos: 1, retain: true
     };
 
+    //set retain
+    opts.retain = !!opts.retain;
+
     //connect
     var client = MqttClient(opts);
 
@@ -35,7 +38,7 @@ function MqttUploader(opts) {
 
                 logger.log("publishing", image.fileName, "via mqtt");
                 try {
-                    client.publish(opts.topic, payload, { qos: opts.qos });
+                    client.publish(opts.topic, payload, { qos: opts.qos, retain: opts.retain });
                 } catch (ex) {
                     logger.error("catched", ex);
                 }
