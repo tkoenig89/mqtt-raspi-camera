@@ -3,6 +3,8 @@
     "target": "/mnt/usb/images/history",
     "encoding": "jpg",
     "imageInterval": 15000,
+    "imageSendWidth": 1280,
+    "imageSendHeight": 960,
     "tempToStorageInterval": 300000,
     "publishInterval": 300000,
     "hours": "!0-5,22,23"

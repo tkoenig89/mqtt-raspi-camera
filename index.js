@@ -12,7 +12,7 @@ var camera_config = require(process.argv[2] || "./config.json");
 var mqtt_config = require(process.argv[3] || "./mqtt-config.json");
 
 //setup
-var mqttUploader = MqttUploader(mqtt_config);
+var mqttUploader = MqttUploader(mqtt_config, camera_config);
 var runner = MqttCameraRunner(camera_config, mqttUploader);
 
 //start

@@ -5,23 +5,25 @@ var MqttClient = require("./mqtt-publishing-client");
 
 module.exports = MqttUploader;
 
-function MqttUploader(opts) {
+function MqttUploader(mqttConf, cameraConf) {
     var lastTimestamp = 0;
+    var imgWidth = cameraConf && cameraConf.imageSendWidth | 1280;
+    var imgHeight = cameraConf && cameraConf.imageSendHeight | 960;
 
     //add last will
-    opts.will = {
-        topic: "stall/" + opts.identifier + "/isOnline",
+    mqttConf.will = {
+        topic: "stall/" + mqttConf.identifier + "/isOnline",
         payload: "no", qos: 1, retain: true
     };
 
     //set retain
-    opts.retain = !!opts.retain;
+    mqttConf.retain = !!mqttConf.retain;
 
     //connect
-    var client = MqttClient(opts);
+    var client = MqttClient(mqttConf);
 
     //send online status
-    client.publish(opts.will.topic, "yes", { qos: 1, retain: true });
+    client.publish(mqttConf.will.topic, "yes", { qos: 1, retain: true });
 
     return {
         publishImage: publishImage
@@ -32,13 +34,13 @@ function MqttUploader(opts) {
         if (image.timestamp > lastTimestamp) {
             lastTimestamp = image.timestamp;
 
-            gm(image.fileName).resize(1280, 960).toBuffer((err, buffer) => {
+            gm(image.fileName).resize(imgWidth, imgHeight).toBuffer((err, buffer) => {
                 if (err) return logger.error(err);
                 var payload = createMqttPayload(image, buffer);
 
                 logger.log("publishing", image.fileName, "via mqtt");
                 try {
-                    client.publish(opts.topic, payload, { qos: opts.qos, retain: opts.retain });
+                    client.publish(mqttConf.topic, payload, { qos: mqttConf.qos, retain: mqttConf.retain });
                 } catch (ex) {
                     logger.error("catched", ex);
                 }
