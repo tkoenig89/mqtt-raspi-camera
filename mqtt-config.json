@@ -2,6 +2,7 @@
     "trustedHostname": "localhost",
     "identifier": "clientname",
     "address": "tls://localhost:1883",
+    "keepalive": 60,
     "username": "user",
     "password": "password",
     "ca": "/certs/ca.crt",

@@ -35,6 +35,7 @@ function MqttPublishingClient(opts) {
             username: opts.username || null,
             password: opts.password || null,
             clean: true,
+            keepalive: opts.keepalive || 60,
             ca: opts.ca ? [fs.readFileSync(opts.ca)] : null,
             checkServerIdentity: checkServerIdentityOverwrite,
             reconnectPeriod: opts.reconnectPeriod || 10000,
