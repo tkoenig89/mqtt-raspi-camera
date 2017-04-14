@@ -1,6 +1,6 @@
 var RaspiCam = require("raspicam");
 var fs = require("fs");
-var logger = require("./logger");
+var logger = require("./common/logger");
 
 module.exports = CameraWrapper;
 

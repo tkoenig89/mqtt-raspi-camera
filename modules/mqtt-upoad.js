@@ -1,6 +1,7 @@
-var fn = require("./fn");
+var fn = require("./common/fn");
 var gm = require('gm');
-var logger = require("./logger");
+var fs = require('fs');
+var logger = require("./common/logger");
 var MqttClient = require("./mqtt-publishing-client");
 
 module.exports = MqttUploader;
@@ -26,8 +27,14 @@ function MqttUploader(mqttConf, cameraConf) {
     client.publish(mqttConf.will.topic, "yes", { qos: 1, retain: true });
 
     return {
-        publishImage: publishImage
+        publishImage: publishImage,
+        publishRawImage: publishRawImage,
+        close: close
     };
+
+    function close(){
+        client.close();
+    }
 
     function publishImage(image) {
         //only publish the latest images
@@ -41,6 +48,24 @@ function MqttUploader(mqttConf, cameraConf) {
                 logger.log("publishing", image.fileName, "via mqtt");
                 try {
                     client.publish(mqttConf.topic, payload, { qos: mqttConf.qos, retain: mqttConf.retain });
+                } catch (ex) {
+                    logger.error("catched", ex);
+                }
+            });
+        }
+    }
+
+    function publishRawImage(image, callback) {
+        if (image.timestamp > lastTimestamp) {
+            lastTimestamp = image.timestamp;
+
+            fs.readFile(image.fileName, function (err, buffer) {
+                if (err) return logger.error(err);
+                var payload = createMqttPayload(image, buffer);
+
+                logger.log("publishing", image.fileName, "via mqtt");
+                try {
+                    client.publish(mqttConf.topic, payload, { qos: mqttConf.qos, retain: mqttConf.retain }, callback);
                 } catch (ex) {
                     logger.error("catched", ex);
                 }

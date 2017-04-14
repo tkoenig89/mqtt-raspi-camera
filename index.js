@@ -1,7 +1,7 @@
 //set logging levels
 var logger = require("./modules/logger")
     .setDebug(false)
-    .setLog(true)
+    .setLog(false)
     .setError(true);
 
 var MqttCameraRunner = require("./modules/mqtt-camera-runner");

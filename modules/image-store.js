@@ -1,6 +1,6 @@
-var fn = require("./fn");
+var fn = require("./common/fn");
 var fs = require("fs");
-var logger = require("./logger");
+var logger = require("./common/logger");
 
 module.exports = ImageStore();
 

@@ -1,5 +1,5 @@
 var mqtt = require("mqtt");
-var logger = require("./logger");
+var logger = require("./common/logger");
 var fs = require("fs");
 
 module.exports = MqttPublishingClient;
@@ -9,8 +9,13 @@ function MqttPublishingClient(opts) {
 
     init();
     return {
-        publish: publish
+        publish: publish,
+        close: close
     };
+    
+    function close(){
+        client.end();
+    }
 
     function init() {
         initClient();

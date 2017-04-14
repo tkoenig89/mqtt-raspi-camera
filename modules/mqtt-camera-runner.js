@@ -1,9 +1,9 @@
-var fn = require("./fn");
+var fn = require("./common/fn");
 var Camera = require("./camera");
 var imageStore = require("./image-store");
 var SkipHours = require("skiphours");
-var logger = require("./logger");
-var Schedule = require("./schedule");
+var logger = require("./common/logger");
+var Schedule = require("./common/schedule");
 
 var cam;
 
