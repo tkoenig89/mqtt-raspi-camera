@@ -8,8 +8,8 @@ module.exports = MqttUploader;
 
 function MqttUploader(mqttConf, cameraConf) {
     var lastTimestamp = 0;
-    var imgWidth = cameraConf && cameraConf.imageSendWidth | 1280;
-    var imgHeight = cameraConf && cameraConf.imageSendHeight | 960;
+    var imgWidth = cameraConf && cameraConf.imageSendWidth || 1280;
+    var imgHeight = cameraConf && cameraConf.imageSendHeight || 960;
 
     //add last will
     mqttConf.will = {
