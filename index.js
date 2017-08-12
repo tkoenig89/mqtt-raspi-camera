@@ -1,5 +1,5 @@
 //set logging levels
-var logger = require("./modules/logger")
+var logger = require("./modules/common/logger")
     .setDebug(false)
     .setLog(false)
     .setError(true);
