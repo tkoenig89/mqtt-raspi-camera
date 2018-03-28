@@ -2,18 +2,21 @@ var mqtt = require("mqtt");
 var logger = require("./common/logger");
 var fs = require("fs");
 
+let msAfterConnectionLostToRestart = 120 * 60 * 1000; // 120 min
+
 module.exports = MqttPublishingClient;
 
 function MqttPublishingClient(opts) {
-    client = null;
+    let isConnected = false;
+    let client = null;
 
     init();
     return {
         publish: publish,
         close: close
     };
-    
-    function close(){
+
+    function close() {
         client.end();
     }
 
@@ -23,16 +26,11 @@ function MqttPublishingClient(opts) {
     }
 
     function publish(topic, message, options, callback) {
-        client.publish(topic, message, options, callback);
+        if (isConnected) {
+            client.publish(topic, message, options, callback);
+        }
     }
 
-    function onConnect(connack) {
-        logger.debug("connected");
-    }
-
-    function onError(err) {
-        logger.error("MQTT ERROR", err);
-    }
 
     function initClient() {
         client = mqtt.connect(opts.address, {
@@ -69,8 +67,27 @@ function MqttPublishingClient(opts) {
         };
     }
 
+    function onConnect() {
+        isConnected = true;
+        logger.log("connected");
+    }
+
+    function onDisconnect() {
+        isConnected = false;
+        logger.log("connection lost");
+    }
+
+    function onError(err) {
+        logger.error("MQTT ERROR", err);
+    }
+
     function setupEventlisteners() {
         client.on("connect", onConnect);
+        client.on("reconnect", onConnect);
+
+        client.on("close", onDisconnect);
+        client.on("offline", onDisconnect);
+
         client.on("error", onError);
     }
 }
