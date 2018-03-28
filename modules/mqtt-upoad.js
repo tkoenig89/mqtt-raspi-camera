@@ -45,7 +45,7 @@ function MqttUploader(mqttConf, cameraConf) {
                 if (err) return logger.error(err);
                 var payload = createMqttPayload(image, buffer);
 
-                logger.log("publishing", image.fileName, "via mqtt");
+                logger.debug("publishing", image.fileName, "via mqtt");
                 try {
                     client.publish(mqttConf.topic, payload, { qos: mqttConf.qos, retain: mqttConf.retain });
                 } catch (ex) {
@@ -63,7 +63,7 @@ function MqttUploader(mqttConf, cameraConf) {
                 if (err) return logger.error(err);
                 var payload = createMqttPayload(image, buffer);
 
-                logger.log("publishing", image.fileName, "via mqtt");
+                logger.debug("publishing", image.fileName, "via mqtt");
                 try {
                     client.publish(mqttConf.topic, payload, { qos: mqttConf.qos, retain: mqttConf.retain }, callback);
                 } catch (ex) {

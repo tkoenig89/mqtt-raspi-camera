@@ -5,7 +5,7 @@ var MqttUploader = require("../modules/mqtt-upoad");
 //set logging levels
 var logger = require("../modules/common/logger")
     .setDebug(false)
-    .setLog(false)
+    .setLog(true)
     .setError(true);
 
 //load configuration
@@ -18,7 +18,10 @@ var mqttUploader = MqttUploader(mqtt_config, camera_config);
 //simulate sending one image
 imageStore.add("18_08_19.jpg", Date.now());
 var image = imageStore.getLatest();
-mqttUploader.publishRawImage(image, () => {
+
+logger.log("publishing image")
+mqttUploader.publishRawImage(image, (...args) => {
+    logger.log("published:", args)
     mqttUploader.close();
 });
 

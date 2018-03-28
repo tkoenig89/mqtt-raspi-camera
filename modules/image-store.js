@@ -25,7 +25,7 @@ function ImageStore() {
     }
 
     function moveImagesToTargetFolder(targetFolder) {        
-        logger.log("moving temp images to", targetFolder);
+        logger.debug("moving temp images to", targetFolder);
 
         var latest = getLatest();
         _imagesOld = images;
@@ -45,7 +45,7 @@ function ImageStore() {
                     var filePath = fn.pathConcat(folderPath, destination.fileName);
                     logger.debug("renaming:", image.fileName, filePath);
                     fs.rename(image.fileName, filePath, (err) => {
-                        if (err) logger.log("unable to move", err);
+                        if (err) logger.error("unable to move file", err);
                     });
                 }
             });

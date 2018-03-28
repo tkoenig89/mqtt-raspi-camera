@@ -1,29 +1,47 @@
-var debug_enabled = false;
-var log_enabled = true;
-var err_enabled = true;
-
 var _module = {
-    debug: function debug(...args) {
-        if (debug_enabled) console.log("DEBUG " + new Date().toLocaleString(), ...args);
-    },
-    log: function log(...args) {
-        if (log_enabled) console.log("LOG " + new Date().toLocaleString(), ...args);
-    },
-    error: function error(...args) {
-        if (err_enabled) console.error("ERROR " + new Date().toLocaleString(), ...args);
-    },
+    debug: _noop,
+    log: _log,
+    error: _error,
+    
     setDebug: function setDebug(doEnable) {
-        debug_enabled = doEnable;
+        if (doEnable) {
+            this.debug = _debug;
+        } else {
+            this.debug = _noop;
+        }
         return _module;
     },
     setLog: function setLog(doEnable) {
-        log_enabled = doEnable;
+        if (doEnable) {
+            this.log = _log;
+        } else {
+            this.log = _noop;
+        }
         return _module;
     },
     setError: function setErr(doEnable) {
-        err_enabled = doEnable;
+        if (doEnable) {
+            this.error = _error;
+        } else {
+            this.error = _noop;
+        }
         return _module;
     }
-};
 
+};
+function _debug(...args) {
+    console.log("DEBUG " + new Date().toLocaleString(), ...args);
+}
+
+function _log(...args) {
+    console.log("LOG " + new Date().toLocaleString(), ...args);
+}
+
+function _error(...args) {
+    console.error("ERROR " + new Date().toLocaleString(), ...args);
+}
+
+function _noop() {
+
+}
 module.exports = _module;
